@@ -1,0 +1,77 @@
+<html>
+<head>
+<script language='javascript'>
+PreloadImg = function (name)
+    {
+        var img = new Image();
+        img.src = name;
+        return img;
+    }
+var img_1 = PreloadImg('http://www.school.pterosaur.co.uk/schools/novel/ball-1.gif');
+
+CreateImg = function (_parent,src,x,y,cx,cy)
+    {
+    var img = document.createElement('IMG');
+        var wid = parseInt(bdy.clientWidth);
+        img.src = src;
+        img.style.position = 'absolute';
+        img.style.left     = x;
+        img.style.top      = y;
+    img.style.width    = cx;
+    img.style.height   = cy;
+        _parent.appendChild(img);
+    return img;
+    }
+
+CreatePath = function (o,orgX,orgY)
+    {
+    var _Path_X = new Array(360);
+    var _Path_Y = new Array(360);
+    var x       = parseInt(o.style.left);
+    var y       = parseInt(o.style.top );
+    var Hyp     = Math.sqrt(Math.pow((orgX-x),2)+Math.pow((orgY-y),2));
+        var stAngle = Math.floor(Math.atan((orgY-y)/(orgX-x))*(180/Math.PI))-1;
+    var Angle;    //added this for clarity
+        for (var n=0;n<360;n++)
+        {
+        Angle=(stAngle+n)%360;
+        _Path_X[n]=orgX+(Math.cos((Angle)*(Math.PI/180))*Hyp); 
+        _Path_Y[n]=orgY+(Math.sin((Angle)*(Math.PI/180))*Hyp); 
+        }
+    return [_Path_X,_Path_Y];
+    }
+
+
+</script>
+</head>
+<body onmousedown='MoveImg()'>
+<script language='javascript'>
+var bdy = document.getElementsByTagName('BODY')[0];
+Floater  = CreateImg(bdy,img_1.src,600,100,100,100);
+Floater1 = CreateImg(bdy,img_1.src,600,150,60,60);
+Floater2 = CreateImg(bdy,img_1.src,600,200,80,80);
+var IntVal   = 1;
+var a1 = CreatePath(Floater,500,100);
+var a2 = CreatePath(Floater1,500,150);
+var a3 = CreatePath(Floater2,500,250);
+var dt = -1;
+var dt1= 360;
+MoveImg = function ()
+    {
+    dt++;
+    dt1--;
+    if ((dt<=360)&&(dt1>-1))
+       {
+    Floater.style.left  = a1[0][dt];
+        Floater.style.top   = a1[1][dt];
+    Floater1.style.left = a2[0][dt1];
+        Floater1.style.top  = a2[1][dt1];
+    Floater2.style.left = a3[0][dt1];
+        Floater2.style.top  = a3[1][dt1];
+        setTimeout(MoveImg,IntVal);
+    }
+    }
+
+</script>
+</body>
+</html>
